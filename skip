@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+
+$application = new Application('SkippyAPI CLI', '1.0');
+
+// Load all commands
+foreach (glob(__DIR__ . '/src/Commands/*.php') as $commandFile) {
+    require_once $commandFile;
+    $class = 'App\\Commands\\' . basename($commandFile, '.php');
+
+    // Skip abstract classes and non-command files
+    if (is_subclass_of($class, Command::class) && !(new ReflectionClass($class))->isAbstract()) {
+        $application->add(new $class());
+    }
+}
+
+$application->run();
