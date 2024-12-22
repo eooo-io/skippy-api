@@ -7,6 +7,7 @@ use App\Routing\Router;
 use Mockery;
 use OpenSwoole\Http\Request;
 use OpenSwoole\Http\Response;
+use App\Models\User;
 
 beforeEach(function() {
     setupDatabase(); // Sets up the in-memory SQLite database for testing
@@ -106,28 +107,30 @@ it('can route to create a user', function() {
     ]);
 });
 
-it('can route to delete a user', function() {
+it('can route to delete a user', function () {
     $routeCollection = new RouteCollection();
-    $routeCollection->add('DELETE', '/v1/users', [UserController::class, 'delete']);
+    $routeCollection->add('DELETE', '/v1/users/{id}', [UserController::class, 'delete']);
 
     $router = new Router($routeCollection);
 
-    // Add test user to database
-    $user = App\Models\User::create(['name' => 'Mark Smith', 'email' => 'mark@example.com']);
+    // Create a test user in the database
+    $user = User::create(['name' => 'Mark Smith', 'email' => 'mark@example.com']);
 
-    // Mock request and response
-    $request  = Mockery::mock(Request::class);
+    // Mock the request and response
+    $request = Mockery::mock(Request::class);
     $response = Mockery::mock(Response::class);
 
-    $request->server = ['request_method' => 'DELETE', 'request_uri' => '/v1/users'];
-    $request->get    = ['id' => $user->id];
+    // Mock the request parameters
+    $request->server = ['request_method' => 'DELETE', 'request_uri' => '/v1/users/' . $user->id];
 
+    // Mock the response methods
+    $response->shouldReceive('status')->once()->with(200); // Ensure this matches the controller
     $response->shouldReceive('header')->once()->with('Content-Type', 'application/json');
     $response->shouldReceive('end')->once()->with(json_encode(['message' => 'User deleted']));
 
+    // Dispatch the route
     $router->dispatch($request, $response);
 
-    assertDatabaseMissing('users', [
-        'id' => $user->id,
-    ]);
+    // Assert that the user was deleted
+    assertDatabaseMissing('users', ['id' => $user->id]);
 });

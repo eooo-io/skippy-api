@@ -10,6 +10,9 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+// Bootstrap the database
+require __DIR__ . '/../config/database.php';
+
 // Initialize routes
 $routeCollection = new RouteCollection();
 require __DIR__ . '/../config/routes/routes.php';

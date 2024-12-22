@@ -10,6 +10,8 @@ if ($_ENV['DB_CONNECTION'] === 'sqlite') {
         'database' => $_ENV['DB_DATABASE'],
     ]);
 }
+
+
 $capsule->addConnection([
     'driver'    => $_ENV['DB_CONNECTION'] ?? 'mysql',
     'host'      => $_ENV['DB_HOST'] ?? '127.0.0.1',

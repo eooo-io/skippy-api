@@ -39,7 +39,7 @@ class Router
         }
 
         $response->status(404);
-        $response->header("Content-Type", "application/json");
+        $response->header('Content-Type', 'application/json');
         $response->end(json_encode(['error' => 'Route not found']));
     }
 

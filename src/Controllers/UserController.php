@@ -8,6 +8,13 @@ use App\Models\User;
 
 class UserController
 {
+    public function index(Request $request, Response $response): void
+    {
+        $users = User::all();
+        $response->header('Content-Type', 'application/json');
+        $response->end($users->toJson());
+    }
+
     public function show(Request $request, Response $response, array $params): void
     {
         $user = User::find($params['id']);
@@ -22,9 +29,20 @@ class UserController
         $response->end($user->toJson());
     }
 
+    public function create(Request $request, Response $response): void
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $user = User::create($data);
+
+        $response->header('Content-Type', 'application/json');
+        $response->end($user->toJson());
+    }
+
     public function delete(Request $request, Response $response, array $params): void
     {
         $user = User::find($params['id']);
+
         if (!$user) {
             $response->status(404);
             $response->header('Content-Type', 'application/json');
@@ -33,6 +51,8 @@ class UserController
         }
 
         $user->delete();
+
+        $response->status(200); // Ensure this is called
         $response->header('Content-Type', 'application/json');
         $response->end(json_encode(['message' => 'User deleted']));
     }
