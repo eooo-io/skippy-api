@@ -1,0 +1,72 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+$application = new Application('SkippyAPI CLI', '1.0');
+$output = new ConsoleOutput();
+
+// Check if --debug flag is passed
+$debugMode = in_array('--debug', $argv, true);
+
+// Filter out --debug from arguments so it doesn’t interfere with commands
+if ($debugMode) {
+    $argv = array_filter($argv, fn($arg) => $arg !== '--debug');
+}
+
+if ($debugMode) {
+    $output->writeln('<info>Loading commands...</info>');
+}
+
+// Recursive Command Loader
+$commandsByNamespace = [];
+$commandDirectories = glob(__DIR__ . '/src/Commands/*', GLOB_ONLYDIR);
+foreach ($commandDirectories as $directory) {
+    $namespaceHeader = strtolower(basename($directory));
+    foreach (glob($directory . '/*.php') as $commandFile) {
+        require_once $commandFile;
+
+        $namespace = 'App\\Commands\\' . basename($directory) . '\\' . basename($commandFile, '.php');
+        if ($debugMode) {
+            $output->writeln("Checking for class: <info>$namespace</info>");
+        }
+
+        if (class_exists($namespace) && is_subclass_of($namespace, Command::class)) {
+            if ($debugMode) {
+                $output->writeln("Adding command: <info>$namespace</info>");
+            }
+            $command = new $namespace();
+            $application->add($command);
+
+            $commandsByNamespace[$namespaceHeader][] = [
+                'name' => $command->getName(),
+                'description' => $command->getDescription(),
+            ];
+        } elseif ($debugMode) {
+            $output->writeln("<error>Class not found or invalid: $namespace</error>");
+        }
+    }
+}
+
+if ($argc < 2) {
+    $output->writeln('<info>Welcome to SkippyAPI CLI!</info>');
+    $output->writeln('<comment>Available commands:</comment>');
+
+    foreach ($commandsByNamespace as $namespaceHeader => $cmds) {
+        $output->writeln("<info>[$namespaceHeader]</info>");
+        foreach ($cmds as $cmd) {
+            $output->writeln("  <comment>{$cmd['name']}</comment> - {$cmd['description']}");
+        }
+        $output->writeln('');
+    }
+
+    $output->writeln('<comment>Run ./skip -h for more details on each command.</comment>');
+    exit(0);
+}
+
+// Run the application
+$application->run();
