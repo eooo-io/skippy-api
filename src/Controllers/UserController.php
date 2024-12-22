@@ -2,49 +2,37 @@
 
 namespace App\Controllers;
 
-use App\Models\User;
 use OpenSwoole\Http\Request;
 use OpenSwoole\Http\Response;
+use App\Models\User;
 
 class UserController
 {
-    public function index(Request $request, Response $response): void
+    public function show(Request $request, Response $response, array $params): void
     {
-        $users = User::all();
-        $response->header('Content-Type', 'application/json');
-        $response->end($users->toJson());
-    }
-
-    public function create(Request $request, Response $response): void
-    {
-        $data = json_decode($request->getContent(), true);
-
-        if (!isset($data['name'], $data['email'])) {
-            $response->status(400);
-            $response->end(json_encode(['error' => 'Invalid input']));
+        $user = User::find($params['id']);
+        if (!$user) {
+            $response->status(404);
+            $response->header('Content-Type', 'application/json');
+            $response->end(json_encode(['error' => 'User not found']));
             return;
         }
-
-        $user = User::create([
-            'name'  => $data['name'],
-            'email' => $data['email'],
-        ]);
 
         $response->header('Content-Type', 'application/json');
         $response->end($user->toJson());
     }
 
-    public function delete(Request $request, Response $response): void
+    public function delete(Request $request, Response $response, array $params): void
     {
-        $id = $request->get['id'] ?? null;
-
-        if (!$id || !User::find($id)) {
+        $user = User::find($params['id']);
+        if (!$user) {
             $response->status(404);
+            $response->header('Content-Type', 'application/json');
             $response->end(json_encode(['error' => 'User not found']));
             return;
         }
 
-        User::destroy($id);
+        $user->delete();
         $response->header('Content-Type', 'application/json');
         $response->end(json_encode(['message' => 'User deleted']));
     }

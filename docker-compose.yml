@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   php:
     build:
@@ -7,6 +9,10 @@ services:
       - "8080:8080"
     volumes:
       - .:/var/www/html
+    environment:
+      - APP_ENV=local
+      - DB_HOST=mariadb
+
   mariadb:
     image: mariadb:latest
     environment:
@@ -16,3 +22,5 @@ services:
       - "3306:3306"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+volumes:
+  mariadb_data:

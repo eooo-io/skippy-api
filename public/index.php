@@ -1,8 +1,8 @@
 <?php
 
+use OpenSwoole\Http\Server;
 use App\Routing\RouteCollection;
 use App\Routing\Router;
-use OpenSwoole\Http\Server;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -10,20 +10,16 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-// Bootstrap Eloquent
-require __DIR__ . '/../config/database.php';
-
-// Set up routes with versioning
+// Initialize routes
 $routeCollection = new RouteCollection();
-$routeCollection->setPrefix('/v1');
 require __DIR__ . '/../config/routes/routes.php';
 
 // Initialize the router
 $router = new Router($routeCollection);
 
-$server = new Server('0.0.0.0', 8080);
+$server = new Server("0.0.0.0", 8080);
 
-$server->on('request', function($request, $response) use ($router) {
+$server->on("request", function ($request, $response) use ($router) {
     $router->dispatch($request, $response);
 });
 

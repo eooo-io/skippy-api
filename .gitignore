@@ -139,7 +139,7 @@ vendor/
 bootstrap/cache/*
 /public/build
 /storage/pail
-/auth.json
+/auth.jsoncomposer update
 #################################
 # Docker Specific
 #################################

@@ -1,20 +1,16 @@
 <?php
 
+use App\Routing\RouteCollection;
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
+use App\Middleware\LoggingMiddleware;
+use App\Middleware\ApiVersionMiddleware;
 
-$routeCollection->setPrefix('/v1');
-
-// Correct paths in routes.php
-$routeCollection->add('GET', '/users', [UserController::class, 'index']);
-$routeCollection->add('POST', '/users', [UserController::class, 'create']);
-$routeCollection->add('DELETE', '/users', [UserController::class, 'delete']);
-
-// Define versioned routes
-$routeCollection->add('GET', '/', [HomeController::class, 'index']);
-$routeCollection->add('GET', '/about', [HomeController::class, 'about']);
-
-// User routes
-$routeCollection->add('GET', '/users', [UserController::class, 'index']);
-$routeCollection->add('POST', '/users', [UserController::class, 'create']);
-$routeCollection->add('DELETE', '//users', [UserController::class, 'delete']);
+$routeCollection->group(['prefix' => '/v1', 'middleware' => [ApiVersionMiddleware::class, LoggingMiddleware::class]], function ($routes) {
+    $routes->add('GET', '/', [HomeController::class, 'index']);
+    $routes->add('GET', '/about', [HomeController::class, 'about']);
+    $routes->add('GET', '/users', [UserController::class, 'index']);
+    $routes->add('GET', '/users/{id}', [UserController::class, 'show']); // Dynamic parameter
+    $routes->add('POST', '/users', [UserController::class, 'create']);
+    $routes->add('DELETE', '/users/{id}', [UserController::class, 'delete']); // Dynamic parameter
+});
