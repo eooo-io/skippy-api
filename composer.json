@@ -14,7 +14,8 @@
         "symfony/var-dumper": "^7.2",
         "pestphp/pest": "^3.7",
         "phpunit/phpunit": "^11.5",
-        "mockery/mockery": "^1.6"
+        "mockery/mockery": "^1.6",
+        "friendsofphp/php-cs-fixer": "^3.65"
     },
     "autoload": {
         "psr-4": {
@@ -25,5 +26,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
+    },
+    "scripts": {
+        "fix": "php-cs-fixer fix --config=.php-cs-fixer.dist.php"
     }
 }

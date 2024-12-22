@@ -20,14 +20,14 @@ function setupDatabase(): void
 {
     $capsule = new Capsule();
     $capsule->addConnection([
-        'driver' => 'sqlite',
+        'driver'   => 'sqlite',
         'database' => ':memory:',
     ]);
 
     $capsule->setAsGlobal();
     $capsule->bootEloquent();
 
-    Capsule::schema()->create('users', function ($table) {
+    Capsule::schema()->create('users', function($table) {
         $table->id();
         $table->string('name');
         $table->string('email');
@@ -39,7 +39,7 @@ function setupDatabase(): void
  * Helper to assert that a database table has a specific record.
  *
  * @param string $table
- * @param array $data
+ * @param array  $data
  */
 function assertDatabaseHas(string $table, array $data): void
 {
@@ -51,7 +51,7 @@ function assertDatabaseHas(string $table, array $data): void
  * Helper to assert that a database table does not have a specific record.
  *
  * @param string $table
- * @param array $data
+ * @param array  $data
  */
 function assertDatabaseMissing(string $table, array $data): void
 {

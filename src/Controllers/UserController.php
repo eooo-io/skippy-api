@@ -11,7 +11,7 @@ class UserController
     public function index(Request $request, Response $response): void
     {
         $users = User::all();
-        $response->header("Content-Type", "application/json");
+        $response->header('Content-Type', 'application/json');
         $response->end($users->toJson());
     }
 
@@ -26,11 +26,11 @@ class UserController
         }
 
         $user = User::create([
-            'name' => $data['name'],
+            'name'  => $data['name'],
             'email' => $data['email'],
         ]);
 
-        $response->header("Content-Type", "application/json");
+        $response->header('Content-Type', 'application/json');
         $response->end($user->toJson());
     }
 
@@ -45,7 +45,7 @@ class UserController
         }
 
         User::destroy($id);
-        $response->header("Content-Type", "application/json");
+        $response->header('Content-Type', 'application/json');
         $response->end(json_encode(['message' => 'User deleted']));
     }
 }

@@ -148,3 +148,7 @@ docker-compose.override.yml
 # Lock Files
 #################################
 *.lock
+#################################
+# Cache files
+#################################
+.php-cs-fixer.cache

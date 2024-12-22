@@ -2,13 +2,11 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-
-
 $capsule = new Capsule;
 
 if ($_ENV['DB_CONNECTION'] === 'sqlite') {
     $capsule->addConnection([
-        'driver' => 'sqlite',
+        'driver'   => 'sqlite',
         'database' => $_ENV['DB_DATABASE'],
     ]);
 }

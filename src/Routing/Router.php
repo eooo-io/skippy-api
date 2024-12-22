@@ -13,10 +13,11 @@ class Router implements RouterInterface
     {
         $this->routeCollection = $routeCollection;
     }
+
     public function dispatch(Request $request, Response $response): void
     {
         $method = $request->server['request_method'];
-        $path = $request->server['request_uri'];
+        $path   = $request->server['request_uri'];
         $routes = $this->routeCollection->getRoutes();
 
         foreach ($routes as $route) {
@@ -26,7 +27,7 @@ class Router implements RouterInterface
 
                 if (is_array($handler)) {
                     [$class, $method] = $handler;
-                    $instance = new $class();
+                    $instance         = new $class();
                     $instance->$method($request, $response);
                     return;
                 }
@@ -40,7 +41,7 @@ class Router implements RouterInterface
 
         error_log("Route not found: {$method} {$path}");
         $response->status(404);
-        $response->header("Content-Type", "application/json");
-        $response->end(json_encode(["error" => "Route not found"]));
+        $response->header('Content-Type', 'application/json');
+        $response->end(json_encode(['error' => 'Route not found']));
     }
 }

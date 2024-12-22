@@ -1,6 +1,5 @@
 <?php
 
-use App\Routing\RouteCollection;
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
 
