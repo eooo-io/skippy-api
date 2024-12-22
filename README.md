@@ -1,3 +1,3 @@
 # SkippyAPI
 
-A lightweight API using PHP 8.3 and Open Swoole.
+A lightweight, Open Swoole-powered PHP API framework designed for speed, simplicity, and extensibility.
