@@ -1,6 +1,10 @@
 # Use the prebuilt Open Swoole image
 FROM openswoole/swoole:php8.3
 
+RUN apt-get update && apt-get install -y \
+    git unzip libcurl4-openssl-dev pkg-config libssl-dev mariadb-client \
+    && docker-php-ext-install pdo pdo_mysql
+
 # Set working directory
 WORKDIR /var/www
 
