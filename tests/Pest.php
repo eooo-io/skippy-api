@@ -12,7 +12,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 | throughout your test suite.
 |
 */
+// Suppress deprecated and strict warnings
+// Suppress deprecated and strict warnings
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 
+// Use global Pest features for all tests
+uses()->in('Feature', 'Unit');
 /**
  * Helper to set up the in-memory SQLite database for testing.
  */

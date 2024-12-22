@@ -1,6 +1,6 @@
 <?php
 
-use Mockery;
+use Mockery as M;
 use App\Models\User;
 use App\Controllers\UserController;
 use App\Routing\RouteCollection; // Add this line
@@ -21,8 +21,8 @@ it('can list users', function () {
     User::create(['name' => 'John Doe', 'email' => 'john@example.com']);
 
     // Mock the request and response
-    $request = Mockery::mock(Request::class);
-    $response = Mockery::mock(Response::class);
+    $request = M::mock(Request::class);
+    $response = M::mock(Response::class);
 
     $response->shouldReceive('header')->once()->with('Content-Type', 'application/json');
     $response->shouldReceive('end')->once()->with(Mockery::on(function ($data) {
@@ -38,8 +38,8 @@ it('can get a user by ID', function () {
     $user = User::create(['name' => 'Jane Doe', 'email' => 'jane@example.com']);
 
     // Mock the request and response
-    $request = Mockery::mock(Request::class);
-    $response = Mockery::mock(Response::class);
+    $request = M::mock(Request::class);
+    $response = M::mock(Response::class);
 
     $response->shouldReceive('header')->once()->with('Content-Type', 'application/json');
     $response->shouldReceive('end')->once()->with(Mockery::on(function ($data) use ($user) {
@@ -54,8 +54,8 @@ it('can get a user by ID', function () {
 
 it('can create a new user', function () {
     // Mock the request and response
-    $request = Mockery::mock(Request::class);
-    $response = Mockery::mock(Response::class);
+    $request = M::mock(Request::class);
+    $response = M::mock(Response::class);
 
     $request->shouldReceive('getContent')->once()->andReturn(json_encode([
         'name' => 'New User',
@@ -63,7 +63,7 @@ it('can create a new user', function () {
     ]));
 
     $response->shouldReceive('header')->once()->with('Content-Type', 'application/json');
-    $response->shouldReceive('end')->once()->with(Mockery::on(function ($data) {
+    $response->shouldReceive('end')->once()->with(M::on(function ($data) {
         $responseData = json_decode($data, true);
         return $responseData['name'] === 'New User' && $responseData['email'] === 'newuser@example.com';
     }));
@@ -86,8 +86,8 @@ it('can route to delete a user', function () {
     $user = User::create(['name' => 'Mark Smith', 'email' => 'mark@example.com']);
 
     // Mock the request and response
-    $request = Mockery::mock(Request::class);
-    $response = Mockery::mock(Response::class);
+    $request = M::mock(Request::class);
+    $response = M::mock(Response::class);
 
     // Mock the request parameters
     $request->server = ['request_method' => 'DELETE', 'request_uri' => '/v1/users/' . $user->id];

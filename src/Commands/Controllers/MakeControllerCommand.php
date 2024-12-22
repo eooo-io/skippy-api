@@ -24,13 +24,22 @@ class MakeControllerCommand extends Command
         $filePath = __DIR__ . '/../../Controllers/' . $name . '.php';
 
         if (file_exists($filePath)) {
-            $output->writeln('<error>Controller already exists!</error>');
+            $output->writeln('<error>Controller already exists!</error>'); // Sends to standard output
             return Command::FAILURE;
         }
 
-        file_put_contents($filePath, "<?php\n\nnamespace App\Controllers;\n\nclass $name\n{\n    // Controller logic\n}\n");
+        file_put_contents($filePath, <<<PHP
+    <?php
 
-        $output->writeln("<info>Controller $name created successfully!</info>");
+    namespace App\Controllers;
+
+    class $name
+    {
+        // Controller logic
+    }
+    PHP);
+
+        $output->writeln('<info>Controller created successfully!</info>');
         return Command::SUCCESS;
     }
 }

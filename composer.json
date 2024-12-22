@@ -13,10 +13,10 @@
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "symfony/var-dumper": "^7.2",
-        "pestphp/pest": "^3.7",
-        "phpunit/phpunit": "^11.5",
+        "phpunit/phpunit": "^11",
         "mockery/mockery": "^1.6",
-        "friendsofphp/php-cs-fixer": "^3.65"
+        "friendsofphp/php-cs-fixer": "^3.65",
+        "pestphp/pest": "^3.7"
     },
     "autoload": {
         "psr-4": {
