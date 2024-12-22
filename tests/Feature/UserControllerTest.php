@@ -1,31 +1,31 @@
 <?php
 
-use Mockery as M;
-use App\Models\User;
 use App\Controllers\UserController;
-use App\Routing\RouteCollection; // Add this line
-use App\Routing\Router;
+use App\Models\User;
+use App\Routing\RouteCollection;
+use App\Routing\Router; // Add this line
+use Mockery as M;
 use OpenSwoole\Http\Request;
 use OpenSwoole\Http\Response;
 
-beforeEach(function () {
+beforeEach(function() {
     setupDatabase(); // Ensure the database is set up before each test
 });
 
-afterEach(function () {
+afterEach(function() {
     Mockery::close(); // Cleanup Mockery after each test
 });
 
-it('can list users', function () {
+it('can list users', function() {
     // Create test users
     User::create(['name' => 'John Doe', 'email' => 'john@example.com']);
 
     // Mock the request and response
-    $request = M::mock(Request::class);
+    $request  = M::mock(Request::class);
     $response = M::mock(Response::class);
 
     $response->shouldReceive('header')->once()->with('Content-Type', 'application/json');
-    $response->shouldReceive('end')->once()->with(Mockery::on(function ($data) {
+    $response->shouldReceive('end')->once()->with(Mockery::on(function($data) {
         return str_contains($data, 'John Doe');
     }));
 
@@ -34,15 +34,15 @@ it('can list users', function () {
     $controller->index($request, $response);
 });
 
-it('can get a user by ID', function () {
+it('can get a user by ID', function() {
     $user = User::create(['name' => 'Jane Doe', 'email' => 'jane@example.com']);
 
     // Mock the request and response
-    $request = M::mock(Request::class);
+    $request  = M::mock(Request::class);
     $response = M::mock(Response::class);
 
     $response->shouldReceive('header')->once()->with('Content-Type', 'application/json');
-    $response->shouldReceive('end')->once()->with(Mockery::on(function ($data) use ($user) {
+    $response->shouldReceive('end')->once()->with(Mockery::on(function($data) use ($user) {
         $responseData = json_decode($data, true);
         return $responseData['id'] === $user->id && $responseData['name'] === $user->name;
     }));
@@ -52,18 +52,18 @@ it('can get a user by ID', function () {
     $controller->show($request, $response, ['id' => $user->id]);
 });
 
-it('can create a new user', function () {
+it('can create a new user', function() {
     // Mock the request and response
-    $request = M::mock(Request::class);
+    $request  = M::mock(Request::class);
     $response = M::mock(Response::class);
 
     $request->shouldReceive('getContent')->once()->andReturn(json_encode([
-        'name' => 'New User',
+        'name'  => 'New User',
         'email' => 'newuser@example.com',
     ]));
 
     $response->shouldReceive('header')->once()->with('Content-Type', 'application/json');
-    $response->shouldReceive('end')->once()->with(M::on(function ($data) {
+    $response->shouldReceive('end')->once()->with(M::on(function($data) {
         $responseData = json_decode($data, true);
         return $responseData['name'] === 'New User' && $responseData['email'] === 'newuser@example.com';
     }));
@@ -76,7 +76,7 @@ it('can create a new user', function () {
     assertDatabaseHas('users', ['name' => 'New User', 'email' => 'newuser@example.com']);
 });
 
-it('can route to delete a user', function () {
+it('can route to delete a user', function() {
     $routeCollection = new RouteCollection();
     $routeCollection->add('DELETE', '/v1/users/{id}', [UserController::class, 'delete']);
 
@@ -86,7 +86,7 @@ it('can route to delete a user', function () {
     $user = User::create(['name' => 'Mark Smith', 'email' => 'mark@example.com']);
 
     // Mock the request and response
-    $request = M::mock(Request::class);
+    $request  = M::mock(Request::class);
     $response = M::mock(Response::class);
 
     // Mock the request parameters

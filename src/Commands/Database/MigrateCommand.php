@@ -88,7 +88,7 @@ class MigrateCommand extends Command
         $capsule->bootEloquent();
 
         // Ensure migrations table exists
-        Capsule::schema()->create('migrations', function (Blueprint $table) {
+        Capsule::schema()->create('migrations', function(Blueprint $table) {
             $table->string('migration')->primary();
             $table->timestamp('batch');
         });
@@ -98,7 +98,7 @@ class MigrateCommand extends Command
     private function getClassNameFromFile(string $file): string
     {
         $fileName = basename($file, '.php');
-        $parts = explode('_', $fileName);
+        $parts    = explode('_', $fileName);
         array_shift($parts); // Remove the timestamp
         return implode('', array_map('ucfirst', $parts));
     }

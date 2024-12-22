@@ -19,10 +19,10 @@ class MakeMigrationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $name = $input->getArgument('name');
+        $name      = $input->getArgument('name');
         $timestamp = date('Y_m_d_His'); // Use timestamp for uniqueness
-        $fileName = "{$timestamp}_{$name}.php";
-        $filePath = __DIR__ . '/../../../database/migrations/' . $fileName;
+        $fileName  = "{$timestamp}_{$name}.php";
+        $filePath  = __DIR__ . '/../../../database/migrations/' . $fileName;
 
         if (file_exists($filePath)) {
             $output->writeln("<error>Migration $fileName already exists!</error>");

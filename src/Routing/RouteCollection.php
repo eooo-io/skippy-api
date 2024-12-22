@@ -4,23 +4,23 @@ namespace App\Routing;
 
 class RouteCollection
 {
-    private array $routes = [];
-    private string $prefix = '';
+    private array $routes     = [];
+    private string $prefix    = '';
     private array $middleware = [];
 
     public function add(string $method, string $path, callable|string|array $handler): void
     {
         $this->routes[] = [
-            'method' => $method,
-            'path' => $this->prefix . $path,
-            'handler' => $handler,
+            'method'     => $method,
+            'path'       => $this->prefix . $path,
+            'handler'    => $handler,
             'middleware' => $this->middleware,
         ];
     }
 
     public function group(array $options, callable $callback): void
     {
-        $originalPrefix = $this->prefix;
+        $originalPrefix     = $this->prefix;
         $originalMiddleware = $this->middleware;
 
         if (isset($options['prefix'])) {
@@ -32,7 +32,7 @@ class RouteCollection
 
         $callback($this);
 
-        $this->prefix = $originalPrefix;
+        $this->prefix     = $originalPrefix;
         $this->middleware = $originalMiddleware;
     }
 

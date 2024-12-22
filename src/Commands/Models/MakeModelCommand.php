@@ -20,7 +20,7 @@ class MakeModelCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $name = $input->getArgument('name');
+        $name     = $input->getArgument('name');
         $filePath = __DIR__ . '/../../Models/' . $name . '.php';
 
         if (file_exists($filePath)) {

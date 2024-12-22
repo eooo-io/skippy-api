@@ -17,7 +17,7 @@ class Router
     public function dispatch(Request $request, Response $response): void
     {
         $method = $request->server['request_method'];
-        $path = $request->server['request_uri'];
+        $path   = $request->server['request_uri'];
         $routes = $this->routeCollection->getRoutes();
 
         foreach ($routes as $route) {
@@ -28,7 +28,7 @@ class Router
                 $handler = $route['handler'];
                 if (is_array($handler)) {
                     [$class, $method] = $handler;
-                    $instance = new $class();
+                    $instance         = new $class();
                     $instance->$method($request, $response, $params);
                 } elseif (is_callable($handler)) {
                     $handler($request, $response, $params);
@@ -46,7 +46,7 @@ class Router
     private function matchRoute(string $requestPath, string $routePath): array|bool
     {
         $requestParts = explode('/', trim($requestPath, '/'));
-        $routeParts = explode('/', trim($routePath, '/'));
+        $routeParts   = explode('/', trim($routePath, '/'));
 
         if (count($requestParts) !== count($routeParts)) {
             return false;

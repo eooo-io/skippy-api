@@ -2,12 +2,12 @@
 
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
+use App\Models\User;
 use App\Routing\RouteCollection;
 use App\Routing\Router;
 use Mockery as M;
 use OpenSwoole\Http\Request;
 use OpenSwoole\Http\Response;
-use App\Models\User;
 
 beforeEach(function() {
     setupDatabase(); // Sets up the in-memory SQLite database for testing
@@ -24,7 +24,7 @@ it('can route to the index page', function() {
     $router = new Router($routeCollection);
 
     // Mock request and response
-    $request = M::mock(OpenSwoole\Http\Request::class);
+    $request  = M::mock(OpenSwoole\Http\Request::class);
     $response = M::mock(OpenSwoole\Http\Response::class);
 
     $request->server = ['request_method' => 'GET', 'request_uri' => '/v1/'];
@@ -107,7 +107,7 @@ it('can route to create a user', function() {
     ]);
 });
 
-it('can route to delete a user', function () {
+it('can route to delete a user', function() {
     $routeCollection = new RouteCollection();
     $routeCollection->add('DELETE', '/v1/users/{id}', [UserController::class, 'delete']);
 
@@ -117,7 +117,7 @@ it('can route to delete a user', function () {
     $user = User::create(['name' => 'Mark Smith', 'email' => 'mark@example.com']);
 
     // Mock the request and response
-    $request = Mockery::mock(Request::class);
+    $request  = Mockery::mock(Request::class);
     $response = Mockery::mock(Response::class);
 
     // Mock the request parameters

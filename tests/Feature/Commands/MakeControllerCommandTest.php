@@ -2,7 +2,7 @@
 
 use Symfony\Component\Process\Process;
 
-beforeEach(function () {
+beforeEach(function() {
     // Define reusable variables for the test
     $this->controllerName = 'TestController';
     $this->controllerPath = __DIR__ . '/../../../src/Controllers/' . $this->controllerName . '.php';
@@ -13,14 +13,14 @@ beforeEach(function () {
     }
 });
 
-afterEach(function () {
+afterEach(function() {
     // Clean up after the test
     if (file_exists($this->controllerPath)) {
         unlink($this->controllerPath);
     }
 });
 
-it('can create a new controller', function () {
+it('can create a new controller', function() {
     // Act: Run the skip make:controller command
     $process = new Process(['php', './skip', 'make:controller', $this->controllerName]);
     $process->run();
@@ -45,7 +45,7 @@ it('can create a new controller', function () {
     expect(trim($actualContent))->toBe(trim($expectedContent));
 });
 
-it('fails if the controller already exists', function () {
+it('fails if the controller already exists', function() {
     // Arrange: Create the controller file manually
     file_put_contents($this->controllerPath, '<?php // Existing controller');
 

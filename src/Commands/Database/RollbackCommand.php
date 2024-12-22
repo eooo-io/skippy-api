@@ -31,7 +31,7 @@ class RollbackCommand extends Command
 
         foreach ($migrations as $migration) {
             $className = $migration->migration;
-            $filePath = __DIR__ . '/../../../database/migrations/' . $className . '.php';
+            $filePath  = __DIR__ . '/../../../database/migrations/' . $className . '.php';
 
             if (!file_exists($filePath)) {
                 $output->writeln("<error>Migration file for $className not found.</error>");

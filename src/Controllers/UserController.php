@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use OpenSwoole\Http\Request;
 use OpenSwoole\Http\Response;
-use App\Models\User;
 
 class UserController
 {
