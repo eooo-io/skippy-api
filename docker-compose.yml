@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   php:
     build:
@@ -9,13 +11,13 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      - APP_ENV=local
-      - DB_CONNECTION=mysql
-      - DB_HOST=mariadb
-      - DB_PORT=3306
-      - DB_DATABASE=skippyapi
-      - DB_USERNAME=root
-      - DB_PASSWORD=root
+      - APP_ENV=${APP_ENV}
+      - DB_CONNECTION=${DB_CONNECTION}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     networks:
       - eoooio_network
 
@@ -23,12 +25,35 @@ services:
     image: mariadb:latest
     container_name: skippyapi-mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: skippyapi
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     ports:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
+    networks:
+      - eoooio_network
+
+  workspace:
+    image: php:8.3-cli
+    container_name: skippyapi-workspace
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    environment:
+      - APP_ENV=${APP_ENV}
+      - DB_CONNECTION=${DB_CONNECTION}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    command: tail -f /dev/null
+    depends_on:
+      - mariadb
     networks:
       - eoooio_network
 
